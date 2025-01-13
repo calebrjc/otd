@@ -51,8 +51,8 @@ class Scheduler:
         )
 
     def _schedule_next_run(self) -> None:
-        LOGGER.info("Scheduling the next run.")
         next_qhour = _get_next_qhour_ts_utc()
+        LOGGER.info(f"Scheduling the next run for {datetime.fromtimestamp(next_qhour).strftime('%Y-%m-%d %H:%M:%S')}.")
 
         # NOTE(Caleb): Don't allow the jobs list to change while scheduling
         with self._lock:
