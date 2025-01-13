@@ -3,20 +3,15 @@ from typing import AsyncGenerator
 
 from fastapi import FastAPI
 
-from otd import scheduler
+from otd import messenger, scheduler
 from otd.log import LOGGER
-
-
-# TODO(Caleb): Remove this function
-def print_hello():
-    print("Hello!")
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     LOGGER.info("Running application startup.")
     app.state.scheduler = scheduler.Scheduler()
-    app.state.scheduler.add_job(print_hello)
+    app.state.scheduler.add_job(messenger.dispatch_pending_messages)
     app.state.scheduler.start()
 
     yield
