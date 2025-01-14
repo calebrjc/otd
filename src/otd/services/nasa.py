@@ -23,13 +23,21 @@ def intro_message() -> Message:
 def daily_message() -> Message:
     daily_message = requests.get(_URL).json()
 
-    title = daily_message["title"]
-    date = daily_message["date"]
-    explanation = daily_message["explanation"]
-    media_url = daily_message.get("hdurl", daily_message["url"])
+    title = daily_message["title"].encode()
+    date = daily_message["date"].encode()
+    explanation = daily_message["explanation"].encode()
+    media_url = daily_message.get("hdurl", daily_message["url"]).encode()
+
+    # NOTE(Caleb): Remove any footnotes from the explanation
+    if double_space_pos := explanation.find(b"   "):
+        explanation = explanation[:double_space_pos]
+
+    payload = b"".join(
+        [b"APOD: ", date, b"\n\n", title, b"\n\n", explanation, b"\n\n", media_url]
+    )
 
     msg = Message()
     msg.add_header("from", config.SMTP_SERVER_EMAIL)
-    msg.set_payload(f"APOD: {date}\n\n{title}\n\n{explanation}\n\n{media_url}")
+    msg.set_payload(payload)
 
     return msg
