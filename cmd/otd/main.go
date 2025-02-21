@@ -18,6 +18,8 @@ func main() {
 				Usage: "Run the OTD web and messaging server",
 				Action: func(ctx context.Context, cmd *cli.Command) error {
 					slog.Info("Running server...")
+					runApp()
+
 					return nil
 				},
 			},

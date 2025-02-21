@@ -22,11 +22,11 @@ build: templ-install
 	@echo "Building..."
 	@# @templ generate
 	
-	@go build -o $(EXE) $(MAIN)
+	@go build -o bin/ ./...
 
 # Run the application
-run:
-	@go run $(MAIN)
+run: build
+	@$(EXE) run
 
 # Test the application
 test:
@@ -36,7 +36,7 @@ test:
 # Clean the binary
 clean:
 	@echo "Cleaning..."
-	@rm -f main
+	@rm -rf bin
 
 # Live Reload
 watch:
